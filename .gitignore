@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.local/
+backups/
+evidence/
+*.p12
+*.key
+*.pem
+*.dump
+*.zip

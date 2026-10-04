@@ -1,0 +1,15 @@
+{
+  "directory": "readeck-reading-desk",
+  "name": "Readeck reading desk",
+  "category": "Other",
+  "description": "Private reading archive with annotations, EPUB and backup export",
+  "icon": "https://readeck.org/media/favicons/favicon.d57024ea.svg",
+  "origins": [
+    { "name": "Readeck", "url": "https://readeck.org/" },
+    { "name": "Readeck source", "url": "https://codeberg.org/readeck/readeck" },
+    { "name": "Readeck documentation", "url": "https://readeck.org/en/docs" }
+  ],
+  "publicationStatus": "unpublished",
+  "templateId": null,
+  "deployCode": null
+}

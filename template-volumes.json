@@ -1,0 +1,6 @@
+{
+  "Readeck": {
+    "mountPath": "/readeck",
+    "sizeMB": 5000
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "railway-readeck-reading-desk",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "./scripts/verify.sh",
+    "smoke": "./scripts/smoke.sh"
+  },
+  "devDependencies": {
+    "railway": "3.6.0"
+  }
+}

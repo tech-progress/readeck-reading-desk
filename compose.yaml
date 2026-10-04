@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    init: true
+    ports:
+      - '127.0.0.1:${LOCAL_PORT:-18318}:8000'
+    environment:
+      PORT: '8000'
+      READECK_SECRET_KEY: ${READECK_SECRET_KEY:?Generate a stable secret}
+      READECK_OWNER_USERNAME: ${READECK_OWNER_USERNAME:-owner}
+      READECK_OWNER_PASSWORD: ${READECK_OWNER_PASSWORD:?Generate initial owner password}
+      READECK_OWNER_EMAIL: ${READECK_OWNER_EMAIL:?Set owner email}
+      READECK_SERVER_BASE_URL: ${READECK_SERVER_BASE_URL:-http://localhost:18318}
+      READECK_ALLOWED_HOSTS: ${READECK_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      READECK_WORKER_NUMBER: '2'
+      READECK_PUBLIC_SHARE_TTL: '1'
+    volumes:
+      - readeck-data:/readeck
+volumes:
+  readeck-data:
