@@ -7,5 +7,6 @@ COPY LICENSE /opt/template/LICENSE
 COPY runtime.sh /opt/template/runtime.sh
 COPY proxy.mjs /opt/template/proxy.mjs
 COPY crawler-proxy.mjs /opt/template/crawler-proxy.mjs
+COPY media-authorization.mjs /opt/template/media-authorization.mjs
 ENTRYPOINT ["/bin/sh", "/opt/template/runtime.sh"]
 CMD []

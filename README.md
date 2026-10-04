@@ -1,6 +1,6 @@
 # Readeck reading desk
 
-Template release **v1.0.1** aligns standalone source defaults, supports ID-keyed draft graphs, retains the original MIT notice in the image and adds release-document checks; Readeck 0.23.4 and the runtime pins remain unchanged. This release must be qualified independently. A source release does not prove marketplace publication. Use the exact-source and stored-graph gates in [PUBLISHING.md](PUBLISHING.md) before treating a release as Railway-qualified.
+Template release **v1.0.2** aligns standalone source defaults, supports ID-keyed draft graphs, retains the original MIT notice in the image adds release-document checks and requires native bookmark authorization for saved images; Readeck 0.23.4 and the runtime pins remain unchanged. This release must be qualified independently. A source release does not prove marketplace publication. Use the exact-source and stored-graph gates in [PUBLISHING.md](PUBLISHING.md) before treating a release as Railway-qualified.
 
 Run a private article archive with annotations and EPUB export on one Readeck service and one exclusive 5,000 MB `/readeck` volume. SQLite and saved resources live in `/readeck/data`, with configuration at `/readeck/config.toml`. Use one replica; two extraction workers run in-process. There is no separate database, worker service or Docker socket.
 
@@ -12,7 +12,7 @@ Run a private article archive with annotations and EPUB export on one Readeck se
 
 ## Source and Railway setup
 
-The standalone distribution contract is [tech-progress/readeck-reading-desk](https://github.com/tech-progress/readeck-reading-desk): maintenance on `main`, Railway source on the slash-free `release-v1` channel, root `/`, and immutable `v1.0.1` identifying the exact release revision. Maintainers must freeze and compare sanitized source, verify access through Railway's GitHub App, and align `.railway/railway.ts` and the queried stored template with those coordinates. A repository link or tag is not evidence of source access, build success or publication. Fork maintainers must set their own accessible repository, release branch and source root.
+The standalone distribution contract is [tech-progress/readeck-reading-desk](https://github.com/tech-progress/readeck-reading-desk): maintenance on `main`, Railway source on the slash-free `release-v1` channel, root `/`, and immutable `v1.0.2` identifying the exact release revision. Maintainers must freeze and compare sanitized source, verify access through Railway's GitHub App, and align `.railway/railway.ts` and the queried stored template with those coordinates. A repository link or tag is not evidence of source access, build success or publication. Fork maintainers must set their own accessible repository, release branch and source root.
 
 1. Retain the native preserved generated-secret expressions for `READECK_SECRET_KEY` (64 characters) and `READECK_OWNER_PASSWORD` (32 characters). Supply the required `READECK_OWNER_EMAIL`. Keep `READECK_OWNER_USERNAME=owner` stable: changing it can create another administrator. Initialization uses the supported private user CLI before opening public HTTP and never resets an existing owner. Rotate passwords in Readeck or through its supported private CLI; changing the bootstrap variable does not rotate an existing password or revoke tokens.
 2. Set `READECK_SERVER_BASE_URL` to the canonical HTTPS domain. `READECK_ALLOWED_HOSTS` must include that hostname, the Railway private hostname and `healthcheck.railway.app`, without ports. Only the app HTTP guard's `PORT=8000` receives a public domain. Never expose backend port 8001, crawler port 8002 or a public TCP proxy.
@@ -21,7 +21,11 @@ The standalone distribution contract is [tech-progress/readeck-reading-desk](htt
 
 All nine graph variables and their exact defaults/references are in [VARIABLES.md](VARIABLES.md). Blank owner email is an intentional required operator input, not a usable default. For local use only, copy `.env.example`, generate fresh secrets (for example, `openssl rand -hex 32`), set private values and restrict file permissions. Startup requires a key of at least 48 characters and password of at least 16. Never commit local environment files, tokens, exports or archive contents.
 
+The canonical URL must be a root HTTP(S) origin, without a path prefix, credentials, query or fragment. Non-root origins fail before public listening; runtime forces the native server prefix to `/` even with a persisted or supplied prefix override.
+
 ## Default permissions and exposure
+
+Upstream `/bm` images are intentionally public by possession of their URL. This recipe instead requires a positive native bookmark permission check before serving those saved resources and marks responses private/no-store. Anonymous and other-user saved images are denied. Public share pages can still expose their shared text, but their images require an authorized account; this deliberately narrowed share behavior is not a full public sharing template. The source archive is not proof of complete assembled-image corresponding-source or static-library relinking delivery.
 
 Treat upstream request-URL logs as sensitive: optional share/recovery capability URLs can appear in them. Client-supplied forwarded IPs are not verified audit attribution or an authorization boundary.
 
@@ -72,6 +76,6 @@ The import runs with no published ports and leaves the app stopped. Supported `-
 
 ## License and support
 
-Original recipe, host guard and crawler proxy code is owner-approved MIT; see [LICENSE](LICENSE). Readeck remains **AGPL-3.0-only** and its binary is unchanged. The Dockerfile includes the hash-verified complete tagged upstream corresponding source at `/usr/share/readeck/corresponding-source.tar.gz`. Preserve upstream license/REUSE notices and corresponding-source/network-use obligations when distributing or hosting; MIT does not relicense upstream components or marks.
+Original recipe, host guard and crawler proxy code is owner-approved MIT; see [LICENSE](LICENSE). Readeck remains **AGPL-3.0-only** and its binary is unchanged. The Dockerfile includes the hash-verified tagged upstream repository archive at `/usr/share/readeck/corresponding-source.tar.gz`. Preserve upstream license/REUSE notices and corresponding-source/network-use obligations when distributing or hosting; MIT does not relicense upstream components or marks.
 
 Review covers the selected source and default permission/exposure contract. It is not universal assembled-image security or legal certification and does not require a zero-finding scanner policy. See [SUPPORT.md](SUPPORT.md), [PUBLISHING.md](PUBLISHING.md) and [MARKETPLACE.md](MARKETPLACE.md). Sanitized distributions exclude private findings, evidence journals, credentials and runtime state.

@@ -1,6 +1,6 @@
 # License review
 
-Reviewed against upstream primary tagged source and cached executable on October 4, 2026. Upstream pin 0.23.4; template contract 1.0.1. This release distributes original source and build instructions, not an assembled binary image.
+Reviewed against upstream primary tagged source and cached executable on October 4, 2026. Upstream pin 0.23.4; template contract 1.0.2. This release distributes original source and build instructions, not an assembled binary image.
 
 The pinned Readeck source headers and REUSE.toml identify AGPL-3.0-only; the root LICENSE contains the AGPLv3 text. Individual files/dependencies and Node/Alpine components have their own licenses. Do not copy website prose/artwork under assumed software terms: website content is separately licensed and the marketplace icon is linked as the product identifier, not relabeled as AGPL artwork. Preserve notices/corresponding source and network-use obligations for modifications; template authorship does not imply vendor endorsement.
 

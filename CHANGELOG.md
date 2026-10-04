@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 — 2026-10-04
+
+- Require positive native bookmark authorization for saved `/bm` images and resources, including encoded-path rejection and private/no-store responses. Shared-page images now require account access.
+- Reject prefixed canonical URLs before public listening and override persisted native prefixes to `/` to keep all saved-media routes guarded.
+- Add actual owner-image success and anonymous/positively authenticated other-user article/image/EPUB denials to recovery tests.
+- Clarify that the pinned archive is the upstream repository, not complete corresponding-source/relinking clearance for conveying an assembled image. Preserve immutable v1.0.1; qualify the new source revision independently.
+
 ## 1.0.1 — 2026-10-04
 
 - Prepare coherent standalone source-release docs for `tech-progress/readeck-reading-desk`, maintenance `main`, Railway `release-v1`, root `/` and immutable `v1.0.1`.

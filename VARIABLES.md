@@ -21,7 +21,7 @@ The wrapper forces `READECK_SERVER_HOST=127.0.0.1`, `READECK_SERVER_PORT=8001` a
 ## Source selection
 
 - `TEMPLATE_REPOSITORY`: distribution contract `tech-progress/readeck-reading-desk`; forks select their own accessible GitHub source.
-- `TEMPLATE_BRANCH`: `release-v1` for Railway, with immutable `v1.0.1` at the exact revision; `main` is the maintenance branch. Slash-containing branches are rejected.
+- `TEMPLATE_BRANCH`: `release-v1` for Railway, with immutable `v1.0.2` at the exact revision; `main` is the maintenance branch. Slash-containing branches are rejected.
 - `TEMPLATE_ROOT_DIR`: `/` for the standalone distribution.
 
 These are authoring inputs, not app service variables or source-access proof. Maintainers must align IaC and the queried stored graph with the contract and verify actual GitHub App access as described in [PUBLISHING.md](PUBLISHING.md).
@@ -41,3 +41,5 @@ These are authoring inputs, not app service variables or source-access proof. Ma
 - `PUBLIC_DISTRIBUTION=1`: structural-verifier mode for a sanitized standalone copy that excludes internal journals.
 
 Local credentials must be freshly generated and stored privately. The same instance key is required for recovery; startup/bootstrap password changes do not rotate existing account credentials. None of these inputs establishes Railway or marketplace qualification.
+
+The canonical base URL must be a root HTTP(S) origin, without a path prefix, credentials, query or fragment. Runtime forces `READECK_SERVER_PREFIX=/`; prefixed hosting is unsupported because the saved-media authorization guard uses the root native API.

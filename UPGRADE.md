@@ -1,6 +1,6 @@
 # Readeck upgrades and recovery
 
-Template release **v1.0.1** changes documentation and docs verification only; Readeck 0.23.4 and runtime pins remain unchanged. This release must be qualified independently. A source release does not prove marketplace publication. The standalone contract is `tech-progress/readeck-reading-desk`, maintenance `main`, Railway `release-v1`, root `/`, immutable `v1.0.1`; qualify the actual selected revision under [PUBLISHING.md](PUBLISHING.md).
+Template release **v1.0.2** adds native-permission checks for saved images and resources, root-only canonical URL enforcement, notice retention and documentation verification; Readeck 0.23.4 and runtime pins remain unchanged. This release must be qualified independently. A source release does not prove marketplace publication. The standalone contract is `tech-progress/readeck-reading-desk`, maintenance `main`, Railway `release-v1`, root `/`, immutable `v1.0.2`; qualify the actual selected revision under [PUBLISHING.md](PUBLISHING.md).
 
 ## Upgrade procedure
 

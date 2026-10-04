@@ -1,6 +1,6 @@
 # Readeck reading desk support
 
-Template release **v1.0.1** updates documentation and docs verification for the bounded Readeck reading desk. This release must be qualified independently. A source release does not prove marketplace publication; use [PUBLISHING.md](PUBLISHING.md) for exact-source, stored-graph, recovery, capacity and cleanup gates.
+Template release **v1.0.2** updates documentation and docs verification for the bounded Readeck reading desk. This release must be qualified independently. A source release does not prove marketplace publication; use [PUBLISHING.md](PUBLISHING.md) for exact-source, stored-graph, recovery, capacity and cleanup gates.
 
 ## Included contract
 

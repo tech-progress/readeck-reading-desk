@@ -103,7 +103,15 @@ assert.equal(bookmark.status, 200, 'Stable token must read the restored/restarte
 assert.equal((await bookmark.json()).note, 'Persistent controlled reading note');
 const article = await request(`/api/bookmarks/${state.bookmarkId}/article`, { headers: authorization });
 assert.equal(article.status, 200);
-assert.ok((await article.text()).includes('controlled reading archive'));
+const articleText = await article.text();
+assert.ok(articleText.includes('controlled reading archive'));
+const image = new URL(articleText.match(/<img[^>]+src="([^"]+)"/i)?.[1]?.replaceAll('&amp;', '&'), base);
+assert.equal(image.origin, base.origin);
+assert.equal((await request(image.href, { headers: authorization })).status, 200);
+cookie = '';
+for (const path of [image.href, `/api/bookmarks/${state.bookmarkId}/article`, `/api/bookmarks/${state.bookmarkId}/article.epub`]) {
+  assert.ok([401, 403].includes((await request(path)).status), 'Anonymous saved payload access must be denied');
+}
 const highlights = await request(`/api/bookmarks/${state.bookmarkId}/annotations`, { headers: authorization });
 assert.equal(highlights.status, 200);
 assert.ok((await highlights.json()).length > 0);
@@ -118,4 +126,7 @@ assert.match(epubEntries, /\.(png|jpe?g|webp)/i, 'EPUB must include a retained i
 await login('unrelated');
 const unrelated = await request(`/api/bookmarks/${state.bookmarkId}`);
 assert.ok([403, 404].includes(unrelated.status), 'A second ordinary account cannot read the owner archive');
+for (const path of [image.href, `/api/bookmarks/${state.bookmarkId}/article`, `/api/bookmarks/${state.bookmarkId}/article.epub`]) {
+  assert.ok([403, 404].includes((await request(path)).status), 'A positively authenticated ordinary account cannot read saved owner payloads');
+}
 console.log('PASS: durable article/note/highlight, valid EPUB with image, stable bearer token and unrelated-user denial.');

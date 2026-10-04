@@ -46,6 +46,11 @@ if compose run --rm --no-deps -T -e READECK_OWNER_PASSWORD= app > "$temporary/un
 fi
 grep -q 'READECK_OWNER_PASSWORD' "$temporary/unsafe-bootstrap.log"
 echo 'PASS: absent private owner password refuses startup before initialization or HTTP.'
+if compose run --rm --no-deps -T -e "READECK_SERVER_BASE_URL=http://localhost:$port/archive/" app > "$temporary/unsafe-prefix.log" 2>&1; then
+  echo 'Unsupported prefixed hosting unexpectedly allowed startup' >&2; exit 1
+fi
+grep -q 'Canonical base URL must be a root HTTP(S) origin' "$temporary/unsafe-prefix.log"
+echo 'PASS: prefixed canonical origins fail before public listening.'
 compose up -d --wait --wait-timeout 150
 BASE_URL="http://localhost:$port" ./scripts/smoke.sh
 compose exec -T app readeck user -config /readeck/config.toml -user owner -dry-run -json | jq -e '.exists==true' >/dev/null

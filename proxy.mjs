@@ -1,8 +1,11 @@
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import { createCrawlerProxy } from './crawler-proxy.mjs';
+import { authorizeMedia, mediaBookmark, rootOrigin } from './media-authorization.mjs';
 
-const origin = new URL(process.env.READECK_SERVER_BASE_URL);
+const origin = rootOrigin(process.env.READECK_SERVER_BASE_URL);
+process.env.READECK_SERVER_BASE_URL = origin.origin;
+process.env.READECK_SERVER_PREFIX = '/';
 const allowedHosts = new Set(process.env.READECK_ALLOWED_HOSTS.split(',').map(host => host.trim().toLowerCase()));
 if (!allowedHosts.has(origin.hostname.toLowerCase())) throw new Error('Canonical origin hostname must be allowed');
 const crawlerProxy = createCrawlerProxy();
@@ -38,7 +41,7 @@ for (let attempt = 0; attempt < 30 && !stopping; attempt += 1) {
 }
 if (!ready) stop(1);
 else if (!stopping) {
-  proxy = http.createServer((request, response) => {
+  proxy = http.createServer(async (request, response) => {
     let hostname;
     try {
       const host = request.headers.host;
@@ -56,12 +59,26 @@ else if (!stopping) {
       response.writeHead(200, { 'Content-Type': 'text/plain' }).end('ready');
       return;
     }
+    let protectedMedia = false;
+    try {
+      const bookmark = mediaBookmark(request.url);
+      if (bookmark) {
+        protectedMedia = true;
+        if (!await authorizeMedia(bookmark, { ...request.headers, host: origin.host })) {
+          response.writeHead(403, { 'Cache-Control': 'private, no-store' }).end('Saved media requires bookmark access');
+          return;
+        }
+      }
+    } catch {
+      response.writeHead(403, { 'Cache-Control': 'private, no-store' }).end('Saved media access denied');
+      return;
+    }
     const upstream = http.request({
       hostname: '127.0.0.1', port: 8001, method: request.method, path: request.url,
       headers: { ...request.headers, host: origin.host, 'x-forwarded-host': origin.host,
         'x-forwarded-proto': origin.protocol.slice(0, -1) },
     }, result => {
-      response.writeHead(result.statusCode ?? 502, result.headers);
+      response.writeHead(result.statusCode ?? 502, protectedMedia ? { ...result.headers, 'cache-control': 'private, no-store' } : result.headers);
       result.pipe(response);
     });
     upstream.setTimeout(120_000, () => upstream.destroy());
